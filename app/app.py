@@ -20,7 +20,7 @@ Cancer Classes:** 5
 st.sidebar.divider()
 st.sidebar.warning("""**Research Use Only**
 This model is an experimental machine learning project and must not be used for clinical diagnosis or medical decision-making.""")
-st.tile(":dna: Cancer Gene Expression Classifier")
+st.title("🧬 Cancer Gene Expression Classifier")
 st.markdown("""Upload a CSV file containing gene-expression values to classify sample into one of five cancer categories.""")
 with st.expander("Cancer Classes Supported"):
     st.markdown("""
