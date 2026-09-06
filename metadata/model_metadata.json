@@ -1,0 +1,18 @@
+{
+    "project_name": "Multi-Class Cancer Classification Using Gene Expression",
+    "model_algorithm": "LinearSVC",
+    "original_gene_features": 20531,
+    "features_after_variance_threshold": 20254,
+    "selected_features": 250,
+    "cancer_classes": [
+        "BRCA",
+        "COAD",
+        "KIRC",
+        "LUAD",
+        "PRAD"
+    ],
+    "test_accuracy": 1.0,
+    "cross_validation_mean_accuracy": 0.99875,
+    "cross_validation_std": 0.002499999999999991,
+    "input_requirement": "CSV containing all original gene-expression features in training order"
+}
