@@ -1,74 +1,158 @@
 import sys
 from pathlib import Path
+
 import pandas as pd
 import streamlit as st
+
 APP_DIR = Path(__file__).resolve().parent
-PROJECT_DIR = APP_DIR.parent
 sys.path.insert(0, str(APP_DIR))
-from predictor import (predict_cancer, load_resources, validate_input)
-st.set_page_config(page_title="Cancer Gene Expression Classifier", page_icon=":dna:", layout="wide", initial_sidebar_state="expanded")
+
+from predictor import (
+    predict_cancer,
+    load_resources,
+    validate_input
+)
+st.set_page_config(
+    page_title="Cancer Gene Expression Classifier",
+    page_icon="🧬",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 st.sidebar.title("Model Information")
-st.sidebar.markdown("""**Algorithm:** Linear Support Vector Machine
-**Feature_Selection:** ANNOVA F-test (SelectKBest)
+
+st.sidebar.markdown(
+    """
+**Algorithm:** Linear Support Vector Machine (LinearSVC)
+
+**Feature Selection:** ANOVA F-test (SelectKBest)
+
 **Selected Features:** 250 genes
-Cancer Classes:** 5
+
+**Supported Cancer Types:** 5
+
 - BRCA
 - COAD
 - KIRC
 - LUAD
-- PRAD""")
-st.sidebar.divider()
-st.sidebar.warning("""**Research Use Only**
-This model is an experimental machine learning project and must not be used for clinical diagnosis or medical decision-making.""")
-st.title("🧬 Cancer Gene Expression Classifier")
-st.markdown("""Upload a CSV file containing gene-expression values to classify sample into one of five cancer categories.""")
-with st.expander("Cancer Classes Supported"):
-    st.markdown("""
-    | Code | Cancer Type |
-    |------|-------------|
-    | BRCA | Breast Invasive Carcinoma |
-    | COAD | Colon Adenocarcinoma |
-    | KIRC | Kidney Renal Clear Cell Carcinoma |
-    | LUAD | Lung Adenocarcinoma |
-    | PRAD | Prostate Adenocarcinoma |
-    """)
+- PRAD
+"""
+)
 
-st.warning("""
-⚠️ **Research and Educational Use Only**
+st.sidebar.divider()
+
+st.sidebar.warning(
+    """
+**Research & Educational Use Only**
+
+This experimental model has not undergone clinical validation
+and must not be used for medical diagnosis, treatment decisions,
+or patient care.
+"""
+)
+
+st.title("🧬 Cancer Gene Expression Classifier")
+
+st.markdown(
+    """
+A machine learning research application for classifying
+gene-expression profiles across five cancer types.
+"""
+)
+
+with st.expander("Cancer Classes Supported"):
+
+    st.markdown(
+        """
+| Code | Cancer Type |
+|------|-------------|
+| BRCA | Breast Invasive Carcinoma |
+| COAD | Colon Adenocarcinoma |
+| KIRC | Kidney Renal Clear Cell Carcinoma |
+| LUAD | Lung Adenocarcinoma |
+| PRAD | Prostate Adenocarcinoma |
+"""
+    )
+
+st.warning(
+    """
+⚠️ **Research & Educational Use Only**
 
 This application is an experimental machine learning research project.
 It has not undergone clinical validation and must not be used for
 medical diagnosis, treatment decisions, or patient care.
-""")
+"""
+)
+
 try:
+
     model, required_genes = load_resources()
+
 except Exception as e:
-    st.error(f"Unable to load model resources: {e}")
+
+    st.error(
+        f"Unable to load model resources: {e}"
+    )
+
     st.stop()
+
 col1, col2, col3 = st.columns(3)
+
 with col1:
-    st.metric("Required Input Genes", f"{len(required_genes):,}")
+
+    st.metric(
+        "Required Input Genes",
+        f"{len(required_genes):,}"
+    )
+
 with col2:
-    st.metric("Selected Features", "250")
+
+    st.metric(
+        "Selected Features",
+        "250"
+    )
 
 with col3:
-    st.metric("Cancer Classes", "5")
+
+    st.metric(
+        "Cancer Classes",
+        "5"
+    )
+
 
 st.divider()
+
+
 st.header("Upload Gene Expression Data")
-upload_file = st.file_uploader("Upload CSV File", type=["csv"], help=("The file must contain all required gene-expression"
-"columns. An optional sample_id column is supported."))
+
+upload_file = st.file_uploader(
+    "Upload CSV File",
+    type=["csv"],
+    help=(
+        "The file must contain all required gene-expression "
+        "columns. An optional sample_id column is supported."
+    )
+)
 
 if upload_file is not None:
+
     try:
+
+        # Read uploaded CSV
         input_data = pd.read_csv(upload_file)
-        st.success(f"File loaded successfully - "
-        f"{input_data.shape[0]} sample(s), "
-        f"{input_data.shape[1]:,} columns")
+
+        st.success(
+            f"File loaded successfully — "
+            f"{input_data.shape[0]} sample(s), "
+            f"{input_data.shape[1]:,} columns."
+        )
 
         with st.expander("Preview Uploaded Data"):
-            st.dataframe(input_data.head(), use_container_width=True)
 
+            st.dataframe(
+                input_data.head(),
+                use_container_width=True
+            )
 
         try:
 
@@ -110,13 +194,13 @@ if upload_file is not None:
                         input_data
                     )
 
-
-
                 st.success(
                     "Classification completed successfully."
                 )
 
+
                 st.header("Prediction Results")
+
 
                 st.dataframe(
                     results,
@@ -124,27 +208,68 @@ if upload_file is not None:
                 )
 
 
+                predicted_classes = (
+                    results["Predicted_Cancer_Type"]
+                )
+
+                total_predictions = len(
+                    predicted_classes
+                )
+
+                most_common_class = (
+                    predicted_classes
+                    .value_counts()
+                    .idxmax()
+                )
+
+                summary_col1, summary_col2 = st.columns(2)
+
+                with summary_col1:
+
+                    st.metric(
+                        "Samples Classified",
+                        total_predictions
+                    )
+
+                with summary_col2:
+
+                    st.metric(
+                        "Most Frequent Prediction",
+                        most_common_class
+                    )
+
 
                 st.subheader(
                     "Predicted Class Distribution"
                 )
 
                 class_counts = (
-                    results[
-                        "Predicted_Cancer_Type"
-                    ]
+                    predicted_classes
                     .value_counts()
+                    .reindex(
+                        ["BRCA", "COAD", "KIRC", "LUAD", "PRAD"],
+                        fill_value=0
+                    )
+                )
+
+                chart_data = pd.DataFrame(
+                    {
+                        "Cancer Type": class_counts.index,
+                        "Samples": class_counts.values
+                    }
                 )
 
                 st.bar_chart(
-                    class_counts
+                    chart_data.set_index("Cancer Type"),
+                    y="Samples",
+                    use_container_width=True
                 )
 
-
-
-                csv_results = results.to_csv(
-                    index=False
-                ).encode("utf-8")
+                csv_results = (
+                    results
+                    .to_csv(index=False)
+                    .encode("utf-8")
+                )
 
                 st.download_button(
                     label="Download Prediction Results",
@@ -164,11 +289,12 @@ if upload_file is not None:
         )
 
 
-
 st.divider()
 
-st.caption("""
-Developed as a machine learning research project for multi-class cancer
-classification using high-dimensional gene-expression data.
+st.caption(
+    """
+Developed as a machine learning research project for multi-class
+cancer classification using high-dimensional gene-expression data.
 Research and educational use only.
-""")
+"""
+)
