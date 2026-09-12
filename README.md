@@ -357,27 +357,27 @@ https://cancer-gene-expression-classifier-kvchczqdnfvza6ysunutc9.streamlit.app/
 
 ### Application Screenshots
 
-The following screenshots demonstrate the deployed application's workflow, from the model interface and data upload through validation and prediction results.
+The following screenshots demonstrate the deployed application's interface, data upload and validation, prediction output, result visualization, and research-use notice.
 
 #### 1. Application Interface
 
 ![Streamlit application interface](screenshots/streamlit1.PNG)
 
-#### 2. Data Upload
+#### 2. Data Upload and Validation
 
-![Gene expression data upload](screenshots/streamlit2.PNG)
+![Gene expression data upload and validation](screenshots/streamlit2.PNG)
 
-#### 3. Input Validation
+#### 3. Prediction Results
 
-![Input validation](screenshots/streamlit3.PNG)
+![Cancer classification prediction results](screenshots/streamlit3.PNG)
 
-#### 4. Prediction Workflow
+#### 4. Prediction Result Visualization
 
-![Cancer classification workflow](screenshots/streamlit4.PNG)
+![Predicted cancer class distribution](screenshots/streamlit4.PNG)
 
-#### 5. Prediction Results
+#### 5. Research and Educational Use Notice
 
-![Cancer classification results](screenshots/streamlit5.PNG)
+![Research and educational use notice](screenshots/streamlit5.PNG)
 
 ---
 
