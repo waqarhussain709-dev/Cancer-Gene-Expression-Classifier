@@ -355,6 +355,30 @@ Users can:
 
 https://cancer-gene-expression-classifier-kvchczqdnfvza6ysunutc9.streamlit.app/
 
+### Application Screenshots
+
+The following screenshots demonstrate the deployed application's workflow, from the model interface and data upload through validation and prediction results.
+
+#### 1. Application Interface
+
+![Streamlit application interface](screenshots/streamlit1.PNG)
+
+#### 2. Data Upload
+
+![Gene expression data upload](screenshots/streamlit2.PNG)
+
+#### 3. Input Validation
+
+![Input validation](screenshots/streamlit3.PNG)
+
+#### 4. Prediction Workflow
+
+![Cancer classification workflow](screenshots/streamlit4.PNG)
+
+#### 5. Prediction Results
+
+![Cancer classification results](screenshots/streamlit5.PNG)
+
 ---
 
 ## Project Structure
@@ -376,6 +400,13 @@ Cancer-Gene-Expression-Classifier/
 │   ├── Final_250_Selected_Genes.csv
 │   ├── model_metadata.json
 │   └── required_gene_columns.csv
+│
+├── screenshots/
+│   ├── streamlit1.PNG
+│   ├── streamlit2.PNG
+│   ├── streamlit3.PNG
+│   ├── streamlit4.PNG
+│   └── streamlit5.PNG
 │
 ├── requirements.txt
 ├── .gitignore
